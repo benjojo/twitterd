@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	fmt.Println("hi")
+	log.Println("Twitterd Started")
 	b, e := ioutil.ReadFile("./twittercfg")
 	if e != nil {
 		log.Fatal("Could not read the ./twittercfg file.")
@@ -34,8 +34,8 @@ func main() {
 	for {
 		t, e := Conn.Next()
 		if e == nil {
-			fmt.Printf("TWEET: %s\n", t.Text)
-			fmt.Printf("OWNER @%s\n", strings.ToLower(twitterbits[0]))
+			log.Println("TWEET: %s\n", t.Text)
+			log.Println("OWNER @%s\n", strings.ToLower(twitterbits[0]))
 			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@%s", strings.ToLower(twitterbits[0]))) {
 				v := url.Values{} // I dont even know
 				t, e := api.PostTweet(fmt.Sprintf("@%s pong", t.User.ScreenName), v)
@@ -45,7 +45,7 @@ func main() {
 					fmt.Println(e)
 				}
 			} else {
-				fmt.Println("Does not start with @<user> ignoring")
+				log.Println("Does not start with @<user> ignoring")
 			}
 		}
 	}
