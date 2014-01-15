@@ -23,7 +23,7 @@ func main() {
 	}
 	Client := twitterstream.NewClient(twitterbits[1], twitterbits[2], twitterbits[3], twitterbits[4])
 	Conn, e := Client.Track(fmt.Sprintf("@%s", twitterbits[0]))
-	// Streamign API is setup now, now just setup the general purpose one now
+	// Streaming API is setup now, now just setup the general purpose one now
 	anaconda.SetConsumerKey(twitterbits[1])
 	anaconda.SetConsumerSecret(twitterbits[2])
 	api := anaconda.NewTwitterApi(twitterbits[3], twitterbits[4])
