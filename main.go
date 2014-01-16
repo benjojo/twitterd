@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/ChimeraCoder/anaconda"    // Working at 2002271f2160a4d243f0308af0827893e2868157
 	"github.com/darkhelmet/twitterstream" // Working at 4051c41877496d38d54647c35897e768fd34385f
-	"io/ioutil"
 	"log"
 	"net/url"
 	"strings"
@@ -13,15 +12,6 @@ import (
 func main() {
 	log.Println("Twitterd Started")
 	tfg := GetCFG()
-	b, e := ioutil.ReadFile("./twittercfg")
-	if e != nil {
-		log.Fatal("Could not read the ./twittercfg file. %s", tfg.Username)
-	}
-	twittertemp := string(b)
-	twitterbits := strings.Split(twittertemp, "\n")
-	if len(twitterbits) != 5 {
-		log.Fatal("Not enought things in twitter cfg, Needs to be (seperated by \\n) username, consumerKey, consumerSecret, accessToken, accessSecret")
-	}
 	Client := twitterstream.NewClient(tfg.ConsumerKey, tfg.ConsumerSecret, tfg.AccessToken, tfg.AccessSecret)
 	Conn, e := Client.Track(fmt.Sprintf("@%s", tfg.Username))
 	// Streaming API is setup now, now just setup the general purpose one now
