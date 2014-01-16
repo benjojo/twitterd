@@ -27,7 +27,7 @@ func main() {
 	// Streaming API is setup now, now just setup the general purpose one now
 	anaconda.SetConsumerKey(tfg.ConsumerKey)
 	anaconda.SetConsumerSecret(tfg.ConsumerSecret)
-	api := anaconda.NewTwitterApi(twitterbits[3], twitterbits[4])
+	api := anaconda.NewTwitterApi(tfg.AccessToken, tfg.AccessSecret)
 
 	if e != nil {
 		log.Fatal("could not open a streaming connection to get mentions :(")
@@ -36,8 +36,8 @@ func main() {
 		t, e := Conn.Next()
 		if e == nil {
 			log.Println("TWEET: %s\n", t.Text)
-			log.Println("OWNER @%s\n", strings.ToLower(twitterbits[0]))
-			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@%s", strings.ToLower(twitterbits[0]))) {
+			log.Println("OWNER @%s\n", strings.ToLower(tfg.Username))
+			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@%s", strings.ToLower(tfg.Username))) {
 				v := url.Values{} // I dont even know
 				t, e := api.PostTweet(fmt.Sprintf("@%s pong", t.User.ScreenName), v)
 				if e == nil {
