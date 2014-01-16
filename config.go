@@ -16,10 +16,21 @@ type TwitConfig struct {
 
 func GetCFG() TwitConfig {
 	b, e := ioutil.ReadFile("./.twittercfg.json")
+	var tfg TwitConfig
 	if e != nil {
-		log.Fatal("cannot open settings file :(")
+		tfg.AccessSecret = "Fillmein"
+		tfg.AccessToken = "Fillmein"
+		tfg.ConsumerKey = "Fillmein"
+		tfg.ConsumerSecret = "Fillmein"
+		tfg.Username = "Fillmein"
+		out, e := json.Marshal(tfg)
+		e = ioutil.WriteFile("./.twittercfg.json", out, 600)
+		if e != nil {
+			log.Fatal("cannot open settings file :(")
+		}
+		log.Fatal("Built config file. please fill it in.")
 	}
-	tfg := TwitConfig{}
+
 	json.Unmarshal(b, &tfg)
-	return TwitConfig
+	return tfg
 }

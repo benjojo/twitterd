@@ -12,9 +12,10 @@ import (
 
 func main() {
 	log.Println("Twitterd Started")
+	tfg := GetCFG()
 	b, e := ioutil.ReadFile("./twittercfg")
 	if e != nil {
-		log.Fatal("Could not read the ./twittercfg file.")
+		log.Fatal("Could not read the ./twittercfg file. %s", tfg.Username)
 	}
 	twittertemp := string(b)
 	twitterbits := strings.Split(twittertemp, "\n")
