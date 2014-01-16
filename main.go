@@ -22,11 +22,11 @@ func main() {
 	if len(twitterbits) != 5 {
 		log.Fatal("Not enought things in twitter cfg, Needs to be (seperated by \\n) username, consumerKey, consumerSecret, accessToken, accessSecret")
 	}
-	Client := twitterstream.NewClient(twitterbits[1], twitterbits[2], twitterbits[3], twitterbits[4])
-	Conn, e := Client.Track(fmt.Sprintf("@%s", twitterbits[0]))
+	Client := twitterstream.NewClient(tfg.ConsumerKey, tfg.ConsumerSecret, tfg.AccessToken, tfg.AccessSecret)
+	Conn, e := Client.Track(fmt.Sprintf("@%s", tfg.Username))
 	// Streaming API is setup now, now just setup the general purpose one now
-	anaconda.SetConsumerKey(twitterbits[1])
-	anaconda.SetConsumerSecret(twitterbits[2])
+	anaconda.SetConsumerKey(tfg.ConsumerKey)
+	anaconda.SetConsumerSecret(tfg.ConsumerSecret)
 	api := anaconda.NewTwitterApi(twitterbits[3], twitterbits[4])
 
 	if e != nil {
