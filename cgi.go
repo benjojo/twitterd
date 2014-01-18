@@ -48,8 +48,8 @@ func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 		log.Printf("Error launching CGI to serve tweet: Error: %s", err)
 	} else {
 		v := url.Values{} // I dont even know
-
+		v.Add("in_reply_to_status_id", fmt.Sprintf("%d", t.Id))
 		api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
-		fmt.Printf("in all caps: %q\n", out.String())
+		log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
 	}
 }
