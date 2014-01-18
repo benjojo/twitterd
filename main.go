@@ -5,11 +5,13 @@ import (
 	"github.com/ChimeraCoder/anaconda"    // Working at 2002271f2160a4d243f0308af0827893e2868157
 	"github.com/darkhelmet/twitterstream" // Working at 4051c41877496d38d54647c35897e768fd34385f
 	"log"
+	"os"
 	"strings"
 )
 
 func main() {
 	log.Println("Twitterd Started")
+	CheckIfResetConfig(os.Args)
 	tfg := GetCFG()
 	Client := twitterstream.NewClient(tfg.ConsumerKey, tfg.ConsumerSecret, tfg.AccessToken, tfg.AccessSecret)
 	var Conn *twitterstream.Connection
