@@ -5,7 +5,7 @@ import (
 	"github.com/ChimeraCoder/anaconda"    // Working at 2002271f2160a4d243f0308af0827893e2868157
 	"github.com/darkhelmet/twitterstream" // Working at 4051c41877496d38d54647c35897e768fd34385f
 	"log"
-	"net/url"
+	// "net/url"
 	"strings"
 )
 
@@ -18,9 +18,10 @@ func main() {
 	anaconda.SetConsumerKey(tfg.ConsumerKey)
 	anaconda.SetConsumerSecret(tfg.ConsumerSecret)
 	api := anaconda.NewTwitterApi(tfg.AccessToken, tfg.AccessSecret)
+	log.Println(tfg)
 	CheckForCGIDir()
 	if e != nil {
-		log.Fatal("could not open a streaming connection to get mentions :(")
+		log.Fatalf("could not open a streaming connection to get mentions :( Reason: %s \n", e)
 	}
 	for {
 		t, e := Conn.Next()
@@ -28,11 +29,13 @@ func main() {
 			log.Println("TWEET: %s\n", t.Text)
 			log.Println("OWNER @%s\n", strings.ToLower(tfg.Username))
 			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@%s", strings.ToLower(tfg.Username))) {
-				v := url.Values{} // I dont even know
-				t, e := api.PostTweet(fmt.Sprintf("@%s pong", t.User.ScreenName), v)
+				// Launch a CGI instance to reply.
+
+				// v := url.Values{} // I dont even know
+				// t, e := api.PostTweet(fmt.Sprintf("@%s pong", t.User.ScreenName), v)
+				go LaunchReply(t, api)
 				if e == nil {
 					fmt.Println(t)
-
 				} else {
 					fmt.Println(e)
 				}
