@@ -58,7 +58,7 @@ For this example we will reply back with the tweetID.
 
 We can do this by putting the following in the script:
 
-```shell
+```bash
 #!/bin/bash
 echo -n "Served by twitterd: "
 echo -n $tweet_id
