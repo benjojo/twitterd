@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 func CheckForCGIDir() {
@@ -41,6 +42,7 @@ func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 		fmt.Sprintf("tweet_text=%s", tweet.Text),
 		fmt.Sprintf("tweet_id=%d", tweet.Id),
 		fmt.Sprintf("tweet_src=%s", tweet.User.ScreenName),
+		fmt.Sprintf("tweet_src_nomention=%s", strings.Join(strings.Split(tweet.Text, " ")[1:], " ")),
 	}
 	var out bytes.Buffer
 	cmd.Stdout = &out
