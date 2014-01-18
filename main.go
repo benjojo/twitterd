@@ -43,6 +43,16 @@ func main() {
 					log.Println("Does not start with @<user> and since 'EnableMention' is disabled ignoring")
 				}
 			}
+		} else {
+			log.Println("I could not poll to get the next tweet. Attempting to reconnect to twitter stream")
+			if tfg.StreamTarget == "default" || tfg.StreamTarget == "" {
+				Conn, e = Client.Track(fmt.Sprintf("@%s", tfg.Username))
+			} else {
+				Conn, e = Client.Track(tfg.StreamTarget)
+			}
+			if e != nil {
+				log.Fatal("Could not reconnect to twitter streaming. Exiting")
+			}
 		}
 	}
 
