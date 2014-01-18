@@ -50,10 +50,14 @@ func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 	if err != nil {
 		log.Printf("Error launching CGI to serve tweet: Error: %s", err)
 	} else {
-		v := url.Values{} // I dont even know
-		v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
-		api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
-		log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
+		if out.String() != "" {
+			v := url.Values{} // I dont even know
+			v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
+			api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
+			log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
+		} else {
+			log.Println("Empty responce from CGI script. Not sending a blank tweet")
+		}
 	}
 }
 
@@ -72,10 +76,14 @@ func LaunchMention(tweet *twitterstream.Tweet, api *anaconda.TwitterApi, reply b
 		log.Printf("Error launching CGI to serve tweet: Error: %s", err)
 	} else {
 		if reply {
-			v := url.Values{} // I dont even know
-			v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
-			api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
-			log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
+			if out.String() != "" {
+				v := url.Values{} // I dont even know
+				v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
+				api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
+				log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
+			} else {
+				log.Println("CGI responce was empty. Not sending a blank tweet.")
+			}
 		}
 	}
 }
