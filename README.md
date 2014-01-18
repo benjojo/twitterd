@@ -52,7 +52,7 @@ declare -x tweet_id="424612189752659969"
 declare -x tweet_src="benjojo"
 declare -x tweet_src_nomention="hello world"
 declare -x tweet_text="@testbot hello world"
-``
+```
 
 For this example we will reply back with the tweetID.
 
