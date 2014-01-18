@@ -36,11 +36,9 @@ func CheckForCGIDir() {
 
 func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 	cmd := exec.Command("./cgi/reply")
-	evars := make([]string, 1)
-	evars = append(evars, fmt.Sprintf("tweet_text:%s", tweet.Text))
-	evars = append(evars, fmt.Sprintf("tweet_id:%s", tweet.Id))
-	evars = append(evars, fmt.Sprintf("tweet_src:%s", tweet.User.ScreenName))
-	cmd.Env = evars
+	cmd.Env = append(cmd.Env, fmt.Sprintf("tweet_text:%s", tweet.Text))
+	cmd.Env = append(cmd.Env, fmt.Sprintf("tweet_id:%d", tweet.Id))
+	cmd.Env = append(cmd.Env, fmt.Sprintf("tweet_src:%s", tweet.User.ScreenName))
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
