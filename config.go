@@ -32,5 +32,8 @@ func GetCFG() TwitConfig {
 	}
 
 	json.Unmarshal(b, &tfg)
+	if tfg.AccessSecret == "Fillmein" || tfg.AccessToken == "Fillmein" || tfg.ConsumerKey == "Fillmein" || tfg.ConsumerSecret == "Fillmein" || tfg.Username == "Fillmein" {
+		log.Fatal("You need to fill in the config settings in ./.twittercfg.json")
+	}
 	return tfg
 }
