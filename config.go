@@ -7,13 +7,15 @@ import (
 )
 
 type TwitConfig struct {
-	Username       string
-	ConsumerKey    string
-	ConsumerSecret string
-	AccessToken    string
-	AccessSecret   string
-	StreamTarget   string // In the case you want to choose somthing else to stream that isnt @<username>
-	EnableReply    bool   // Do you want to enable /cgi/reply
+	Username           string
+	ConsumerKey        string
+	ConsumerSecret     string
+	AccessToken        string
+	AccessSecret       string
+	StreamTarget       string // In the case you want to choose somthing else to stream that isnt @<username>
+	EnableReply        bool   // Do you want to enable /cgi/reply
+	EnableMention      bool   // Do you want to enable /cgi/mention
+	EnableReplyMention bool   // Do you want the /cgi/mention to reply to things?
 }
 
 func GetCFG() TwitConfig {

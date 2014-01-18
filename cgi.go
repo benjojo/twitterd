@@ -57,6 +57,29 @@ func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 	}
 }
 
+func LaunchMention(tweet *twitterstream.Tweet, api *anaconda.TwitterApi, reply bool) {
+	cmd := exec.Command("./cgi/mention" + getprefix())
+	cmd.Env = []string{
+		fmt.Sprintf("tweet_text=%s", tweet.Text),
+		fmt.Sprintf("tweet_id=%d", tweet.Id),
+		fmt.Sprintf("tweet_src=%s", tweet.User.ScreenName),
+		fmt.Sprintf("tweet_src_nomention=%s", strings.Join(strings.Split(tweet.Text, " ")[1:], " ")),
+	}
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		log.Printf("Error launching CGI to serve tweet: Error: %s", err)
+	} else {
+		if reply {
+			v := url.Values{} // I dont even know
+			v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
+			api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
+			log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
+		}
+	}
+}
+
 func getprefix() string {
 	if runtime.GOOS == "windows" {
 		return ".exe"

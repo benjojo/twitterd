@@ -15,7 +15,7 @@ func main() {
 	var Conn *twitterstream.Connection
 	var e error
 
-	if tfg.StreamTarget == "default" {
+	if tfg.StreamTarget == "default" || tfg.StreamTarget == "" {
 		Conn, e = Client.Track(fmt.Sprintf("@%s", tfg.Username))
 	} else {
 		Conn, e = Client.Track(tfg.StreamTarget)
@@ -24,7 +24,6 @@ func main() {
 	anaconda.SetConsumerKey(tfg.ConsumerKey)
 	anaconda.SetConsumerSecret(tfg.ConsumerSecret)
 	api := anaconda.NewTwitterApi(tfg.AccessToken, tfg.AccessSecret)
-	log.Println(tfg)
 	CheckForCGIDir()
 	if e != nil {
 		log.Fatalf("could not open a streaming connection to get mentions :( Reason: %s \n", e)
@@ -36,7 +35,11 @@ func main() {
 				// Launch a CGI instance to reply.
 				go LaunchReply(t, api)
 			} else {
-				log.Println("Does not start with @<user> ignoring")
+				if tfg.EnableMention {
+					go LaunchMention(t, api, tfg.EnableReplyMention)
+				} else {
+					log.Println("Does not start with @<user> ignoring")
+				}
 			}
 		}
 	}
