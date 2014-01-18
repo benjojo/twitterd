@@ -26,5 +26,5 @@ The configuration files are as follows:
 
 `EnableMention` Enables the CGI script `./cgi/mention` to be exectuted when anything appeares in the stream
 
-`StreamTarget` Is what the target stream search is, by default the value is "default" meaning that it will look for "@<username>".
+`StreamTarget` Is what the target stream search is, by default the value is "default" meaning that it will look for "@username".
 
