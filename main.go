@@ -18,7 +18,7 @@ func main() {
 	anaconda.SetConsumerKey(tfg.ConsumerKey)
 	anaconda.SetConsumerSecret(tfg.ConsumerSecret)
 	api := anaconda.NewTwitterApi(tfg.AccessToken, tfg.AccessSecret)
-
+	CheckForCGIDir()
 	if e != nil {
 		log.Fatal("could not open a streaming connection to get mentions :(")
 	}
@@ -32,6 +32,7 @@ func main() {
 				t, e := api.PostTweet(fmt.Sprintf("@%s pong", t.User.ScreenName), v)
 				if e == nil {
 					fmt.Println(t)
+
 				} else {
 					fmt.Println(e)
 				}
