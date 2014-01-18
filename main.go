@@ -40,7 +40,7 @@ func main() {
 				if tfg.EnableMention {
 					go LaunchMention(t, api, tfg.EnableReplyMention)
 				} else {
-					log.Println("Does not start with @<user> ignoring")
+					log.Println("Does not start with @<user> and since 'EnableMention' is disabled ignoring")
 				}
 			}
 		}
