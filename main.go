@@ -12,10 +12,13 @@ func main() {
 	log.Println("Twitterd Started")
 	tfg := GetCFG()
 	Client := twitterstream.NewClient(tfg.ConsumerKey, tfg.ConsumerSecret, tfg.AccessToken, tfg.AccessSecret)
+	var Conn *twitterstream.Connection
+	var e error
+
 	if tfg.StreamTarget == "default" {
-		Conn, e := Client.Track(fmt.Sprintf("@%s", tfg.Username))
+		Conn, e = Client.Track(fmt.Sprintf("@%s", tfg.Username))
 	} else {
-		Conn, e := Client.Track(tfg.StreamTarget)
+		Conn, e = Client.Track(tfg.StreamTarget)
 	}
 	// Streaming API is setup now, now just setup the general purpose one now
 	anaconda.SetConsumerKey(tfg.ConsumerKey)
