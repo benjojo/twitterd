@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"runtime"
 )
 
 func CheckForCGIDir() {
@@ -35,7 +36,7 @@ func CheckForCGIDir() {
 }
 
 func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
-	cmd := exec.Command("./cgi/reply")
+	cmd := exec.Command("./cgi/reply" + getprefix())
 	cmd.Env = []string{
 		fmt.Sprintf("tweet_text=%s", tweet.Text),
 		fmt.Sprintf("tweet_id=%d", tweet.Id),
@@ -52,4 +53,11 @@ func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 		api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
 		log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
 	}
+}
+
+func getprefix() string {
+	if runtime.GOOS == "windows" {
+		return ".exe"
+	}
+	return ""
 }
