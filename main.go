@@ -33,7 +33,9 @@ func main() {
 		if e == nil {
 			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@")) { // check if it starts with a @
 				// Launch a CGI instance to reply.
-				go LaunchReply(t, api)
+				if tfg.EnableReply {
+					go LaunchReply(t, api)
+				}
 			} else {
 				if tfg.EnableMention {
 					go LaunchMention(t, api, tfg.EnableReplyMention)
