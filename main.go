@@ -30,15 +30,7 @@ func main() {
 			log.Println("OWNER @%s\n", strings.ToLower(tfg.Username))
 			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@%s", strings.ToLower(tfg.Username))) {
 				// Launch a CGI instance to reply.
-
-				// v := url.Values{} // I dont even know
-				// t, e := api.PostTweet(fmt.Sprintf("@%s pong", t.User.ScreenName), v)
 				go LaunchReply(t, api)
-				if e == nil {
-					fmt.Println(t)
-				} else {
-					fmt.Println(e)
-				}
 			} else {
 				log.Println("Does not start with @<user> ignoring")
 			}
