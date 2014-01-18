@@ -12,6 +12,8 @@ type TwitConfig struct {
 	ConsumerSecret string
 	AccessToken    string
 	AccessSecret   string
+	StreamTarget   string // In the case you want to choose somthing else to stream that isnt @<username>
+	EnableReply    bool   // Do you want to enable /cgi/reply
 }
 
 func GetCFG() TwitConfig {
@@ -23,6 +25,8 @@ func GetCFG() TwitConfig {
 		tfg.ConsumerKey = "Fillmein"
 		tfg.ConsumerSecret = "Fillmein"
 		tfg.Username = "Fillmein"
+		tfg.StreamTarget = "default"
+		tfg.EnableReply = true
 		out, e := json.Marshal(tfg)
 		e = ioutil.WriteFile("./.twittercfg.json", out, 600)
 		if e != nil {
