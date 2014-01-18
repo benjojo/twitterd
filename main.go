@@ -26,8 +26,8 @@ func main() {
 	for {
 		t, e := Conn.Next()
 		if e == nil {
-			log.Println("TWEET: %s\n", t.Text)
-			log.Println("OWNER @%s\n", strings.ToLower(tfg.Username))
+			// log.Println("TWEET: %s\n", t.Text)
+			// log.Println("OWNER @%s\n", strings.ToLower(tfg.Username))
 			if strings.HasPrefix(strings.ToLower(t.Text), fmt.Sprintf("@%s", strings.ToLower(tfg.Username))) {
 				// Launch a CGI instance to reply.
 				go LaunchReply(t, api)
