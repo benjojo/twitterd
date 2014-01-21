@@ -67,6 +67,8 @@ func LaunchMention(tweet *twitterstream.Tweet, api *anaconda.TwitterApi, reply b
 		fmt.Sprintf("tweet_text=%s", tweet.Text),
 		fmt.Sprintf("tweet_id=%d", tweet.Id),
 		fmt.Sprintf("tweet_src=%s", tweet.User.ScreenName),
+		fmt.Sprintf("tweet_src_name=%s", tweet.User.Name),
+		fmt.Sprintf("tweet_src_followers=%s", tweet.User.FollowersCount),
 		fmt.Sprintf("tweet_src_nomention=%s", strings.Join(strings.Split(tweet.Text, " ")[1:], " ")),
 	}
 	var out bytes.Buffer
