@@ -17,6 +17,7 @@ type TwitConfig struct {
 	EnableReply        bool   // Do you want to enable /cgi/reply
 	EnableMention      bool   // Do you want to enable /cgi/mention
 	EnableReplyMention bool   // Do you want the /cgi/mention to reply to things?
+	AckWithFav         bool   // When the script finishes, ACK back to the user by faving the tweet.
 }
 
 func GetDefaultConfig() TwitConfig {
@@ -30,6 +31,7 @@ func GetDefaultConfig() TwitConfig {
 	tfg.EnableReply = true
 	tfg.EnableMention = false
 	tfg.EnableReplyMention = false
+	tfg.AckWithFav = false
 	return tfg
 }
 
