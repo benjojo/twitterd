@@ -11,6 +11,7 @@ import (
 
 func main() {
 	log.Println("Twitterd Started")
+	CheckIfUserIsRoot()
 	CheckIfResetConfig(os.Args)
 	tfg := GetCFG()
 	Client := twitterstream.NewClient(tfg.ConsumerKey, tfg.ConsumerSecret, tfg.AccessToken, tfg.AccessSecret)
