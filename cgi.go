@@ -36,7 +36,7 @@ func CheckForCGIDir() {
 	}
 }
 
-func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
+func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi, ackwithfav bool) {
 	cmd := exec.Command("./cgi/reply" + getprefix())
 	cmd.Env = []string{
 		fmt.Sprintf("tweet_text=%s", tweet.Text),
@@ -57,6 +57,9 @@ func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi) {
 			log.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
 		} else {
 			log.Println("Empty responce from CGI script. Not sending a blank tweet")
+		}
+		if ackwithfav {
+			api.Favorite(tweet.Id)
 		}
 	}
 }
