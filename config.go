@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -40,15 +39,15 @@ func CheckIfResetConfig(args []string) {
 		if args[1] == "reset" {
 			e := os.Remove("./.twittercfg.json")
 			if e != nil {
-				log.Fatal("Could not remove current config file. Permissions issue?")
+				Logger.Fatal("Could not remove current config file. Permissions issue?")
 			}
 			Default := GetDefaultConfig()
 			out, e := json.Marshal(Default)
 			e = ioutil.WriteFile("./.twittercfg.json", out, 600)
 			if e != nil {
-				log.Fatal("cannot open settings file :(")
+				Logger.Fatal("cannot open settings file :(")
 			}
-			log.Fatal("Built config file. please fill it in.")
+			Logger.Fatal("Built config file. please fill it in.")
 		}
 	}
 }
@@ -60,17 +59,17 @@ func GetCFG() TwitConfig {
 		out, e := json.Marshal(tfg)
 		e = ioutil.WriteFile("./.twittercfg.json", out, 600)
 		if e != nil {
-			log.Fatal("cannot open settings file :(")
+			Logger.Fatal("cannot open settings file :(")
 		}
-		log.Fatal("Built config file. please fill it in.")
+		Logger.Fatal("Built config file. please fill it in.")
 	}
 
 	e = json.Unmarshal(b, &tfg)
 	if e != nil {
-		log.Fatalf("Could not parse config settings. You can reset the cfg by doing $twitterd reset")
+		Logger.Fatalf("Could not parse config settings. You can reset the cfg by doing $twitterd reset")
 	}
 	if tfg.AccessSecret == "Fillmein" || tfg.AccessToken == "Fillmein" || tfg.ConsumerKey == "Fillmein" || tfg.ConsumerSecret == "Fillmein" || tfg.Username == "Fillmein" {
-		log.Fatal("You need to fill in the config settings in ./.twittercfg.json")
+		Logger.Fatal("You need to fill in the config settings in ./.twittercfg.json")
 	}
 	return tfg
 }

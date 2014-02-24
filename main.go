@@ -9,8 +9,11 @@ import (
 	"strings"
 )
 
+var Logger *log.Logger
+
 func main() {
-	log.Println("Twitterd Started")
+	Logger = log.New(os.Stdout, "[Twitterd] ", log.Ltime)
+	Logger.Println("Twitterd Started")
 	CheckIfUserIsRoot()
 	CheckIfResetConfig(os.Args)
 	tfg := GetCFG()
@@ -29,7 +32,7 @@ func main() {
 	api := anaconda.NewTwitterApi(tfg.AccessToken, tfg.AccessSecret)
 	CheckForCGIDir()
 	if e != nil {
-		log.Fatalf("could not open a streaming connection to get mentions :( Reason: %s \n", e)
+		Logger.Fatalf("could not open a streaming connection to get mentions :( Reason: %s \n", e)
 	}
 	for {
 		t, e := Conn.Next()
@@ -43,18 +46,18 @@ func main() {
 				if tfg.EnableMention {
 					go LaunchMention(t, api, tfg.EnableReplyMention)
 				} else {
-					log.Println("Does not start with @<user> and since 'EnableMention' is disabled ignoring")
+					Logger.Println("Does not start with @<user> and since 'EnableMention' is disabled ignoring")
 				}
 			}
 		} else {
-			log.Println("I could not poll to get the next tweet. Attempting to reconnect to twitter stream")
+			Logger.Println("I could not poll to get the next tweet. Attempting to reconnect to twitter stream")
 			if tfg.StreamTarget == "default" || tfg.StreamTarget == "" {
 				Conn, e = Client.Track(fmt.Sprintf("@%s", tfg.Username))
 			} else {
 				Conn, e = Client.Track(tfg.StreamTarget)
 			}
 			if e != nil {
-				log.Fatal("Could not reconnect to twitter streaming. Exiting")
+				Logger.Fatal("Could not reconnect to twitter streaming. Exiting")
 			}
 		}
 	}
