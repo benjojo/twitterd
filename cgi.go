@@ -13,7 +13,7 @@ import (
 )
 
 func IsFile(path string) bool {
-	f, e := os.Stat("./cgi")
+	f, e := os.Stat(path)
 	if e != nil {
 		return false
 	}
