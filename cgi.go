@@ -46,63 +46,43 @@ func CheckForCGIDir() {
 	}
 }
 
+func LaunchARealReply(path string, tweet *twitterstream.Tweet, api *anaconda.TwitterApi, ackwithfav bool) {
+	cmd := exec.Command(path + getprefix())
+	cmd.Env = []string{
+		fmt.Sprintf("tweet_text=%s", tweet.Text),
+		fmt.Sprintf("tweet_id=%d", tweet.Id),
+		fmt.Sprintf("tweet_src=%s", tweet.User.ScreenName),
+		fmt.Sprintf("tweet_src_nomention=%s", strings.Join(strings.Split(tweet.Text, " ")[1:], " ")),
+	}
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		Logger.Printf("Error launching CGI to serve tweet: Error: %s", err)
+	} else {
+		if out.String() != "" {
+			v := url.Values{} // I dont even know
+			v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
+			api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
+			Logger.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
+		} else {
+			Logger.Println("Empty responce from CGI script. Not sending a blank tweet")
+		}
+		if ackwithfav {
+			api.Favorite(tweet.Id)
+		}
+	}
+}
+
 func LaunchReply(tweet *twitterstream.Tweet, api *anaconda.TwitterApi, ackwithfav bool) {
 	if IsFile("./cgi/reply" + getprefix()) {
-		cmd := exec.Command("./cgi/reply" + getprefix())
-		cmd.Env = []string{
-			fmt.Sprintf("tweet_text=%s", tweet.Text),
-			fmt.Sprintf("tweet_id=%d", tweet.Id),
-			fmt.Sprintf("tweet_src=%s", tweet.User.ScreenName),
-			fmt.Sprintf("tweet_src_nomention=%s", strings.Join(strings.Split(tweet.Text, " ")[1:], " ")),
-		}
-		var out bytes.Buffer
-		cmd.Stdout = &out
-		err := cmd.Run()
-		if err != nil {
-			Logger.Printf("Error launching CGI to serve tweet: Error: %s", err)
-		} else {
-			if out.String() != "" {
-				v := url.Values{} // I dont even know
-				v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
-				api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
-				Logger.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
-			} else {
-				Logger.Println("Empty responce from CGI script. Not sending a blank tweet")
-			}
-			if ackwithfav {
-				api.Favorite(tweet.Id)
-			}
-		}
+		LaunchARealReply("./cgi/reply", tweet, api, ackwithfav)
 	} else {
 		Logger.Println("Reply script does not exist. Try making one?")
 	}
 
 	if IsFile("./cgi/reply_" + tweet.User.ScreenName + getprefix()) {
-		cmd := exec.Command("./cgi/reply" + tweet.User.ScreenName + getprefix())
-		cmd.Env = []string{
-			fmt.Sprintf("tweet_text=%s", tweet.Text),
-			fmt.Sprintf("tweet_id=%d", tweet.Id),
-			fmt.Sprintf("tweet_src=%s", tweet.User.ScreenName),
-			fmt.Sprintf("tweet_src_nomention=%s", strings.Join(strings.Split(tweet.Text, " ")[1:], " ")),
-		}
-		var out bytes.Buffer
-		cmd.Stdout = &out
-		err := cmd.Run()
-		if err != nil {
-			Logger.Printf("Error launching CGI to serve tweet: Error: %s", err)
-		} else {
-			if out.String() != "" {
-				v := url.Values{} // I dont even know
-				v.Add("in_reply_to_status_id", fmt.Sprintf("%d", tweet.Id))
-				api.PostTweet(fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()), v)
-				Logger.Printf("Tweet came in, Replied with %s", fmt.Sprintf("@%s %s", tweet.User.ScreenName, out.String()))
-			} else {
-				Logger.Println("Empty responce from CGI script. Not sending a blank tweet")
-			}
-			if ackwithfav {
-				api.Favorite(tweet.Id)
-			}
-		}
+		LaunchARealReply("./cgi/reply_"+tweet.User.ScreenName, tweet, api, ackwithfav)
 	}
 
 }
